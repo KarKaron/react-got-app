@@ -20,4 +20,21 @@ export default class GotServise {
   getCharacter(id) {
     return this.getResourse(`/characters/${id}`);
   }
+
+  getAllBooks() {
+    return this.getResourse('/books/?page=1&pageSize=10');
+  }
+
+  getBooks(id) {
+    return this.getResourse(`/books/${id}`);
+  }
+
+  getAllHouses() {
+    return this.getResourse('/houses/?page=1&pageSize=10');
+  }
+
+  getHouses(id) {
+    return this.getResourse(`/houses/${id}`);
+  }
+
 }
