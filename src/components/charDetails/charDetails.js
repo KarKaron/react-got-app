@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const CharDetail = styled.div`
   background-color: #fff;
   padding: 25px 25px 15px 25px;
   margin-bottom: 40px;
+  border-radius: 4px;
 `;
 
 const CharDetailTitle = styled.h4`
@@ -21,7 +22,7 @@ const CharDetailTitle = styled.h4`
 export default class CharDetails extends Component {
   render() {
     return (
-      <CharDetail className="rouned">
+      <CharDetail>
         <CharDetailTitle>John Snow</CharDetailTitle>
         <ul className="list-group list-group-flush">
           <li className="list-group-item d-flex justify-content-between">
