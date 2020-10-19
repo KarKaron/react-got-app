@@ -1,33 +1,53 @@
 import React, { Component } from 'react';
-import { Col, Row, Container, Button } from 'reactstrap';
 import Header from '../header/header';
 import RandomChar from '../randomChar/randomChar';
-import ItemList from '../itemList/itemList';
-import CharDetails from '../charDetails/charDetails';
+import CharacterPage from '../characterPage/characterPage'
+import ErrorMessage from '../errorMessage/errorMessage';
+
+import { Col, Row, Container, Button } from 'reactstrap';
 
 export default class App extends Component {
 
   state = {
-    visible: true,
-    buttonText: 'Hide Element'
+    showRandomChar: true,
+    buttonText: 'Hide Element',
+    error: false
+  }
+
+  componentDidCatch() {
+    this.setState({
+      error: true
+    })
   }
 
   onToogle = () => {
-    const newVisible = !this.state.visible
+    const showRandomChar = !this.state.showRandomChar
     let text = 'Hide Element'
-    if (!newVisible) {
+    if (!showRandomChar) {
       text = 'Show Element'
     } 
     this.setState({
-      visible: newVisible,
+      showRandomChar: showRandomChar,
       buttonText: text
     })
   }
 
-  render() {
-    const {visible, buttonText} = this.state;
+  // onToggle = () => {
+  //   this.setState((state) => {
+  //     return {
+  //       visible: !state.visible
+  //     }
+  //   })
+  // }
 
-    const content = visible ? <RandomChar/> : null
+  render() {
+    const {showRandomChar, buttonText, error} = this.state;
+    
+    if (error) {
+      return <ErrorMessage/>
+    }
+
+    const content = showRandomChar ? <RandomChar/> : null
 
     return (
       <> 
@@ -47,14 +67,7 @@ export default class App extends Component {
               </Button>  
             </Col>
           </Row>
-          <Row>
-            <Col md='6'>
-              <ItemList />
-            </Col>
-            <Col md='6'>
-              <CharDetails />
-            </Col>
-          </Row>
+          <CharacterPage/>
         </Container>
       </>
     );

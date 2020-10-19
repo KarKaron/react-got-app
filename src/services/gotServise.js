@@ -16,7 +16,7 @@ export default class GotServise {
   /* ------------------ ФУНКЦИИ ПЕРСОНАЖЕЙ --------------------- */
   // Получение данных всех персонажей
   async getAllCharacters() {
-    const res = await this.getResourse('/characters/?page=15&pageSize=10');
+    const res = await this.getResourse('/characters/?page=20&pageSize=10');
     return res.map(this._transformCharacter)
   }
   // Получение данных одного персонажа
@@ -24,37 +24,19 @@ export default class GotServise {
     const char = await this.getResourse(`/characters/${id}`);
     return this._transformCharacter(char);
   }
-  // Трансформирование данных запроса 
-  _transformCharacter(char) {
-    return {
-      name: char.name,
-      gender: char.gender,
-      born: char.born,
-      died: char.died,
-      culture: char.culture
-    }
-  }
+
   /* ------------------ ФУНКЦИИ КНИГ --------------------- */
   // Получение данных всех книг
   async getAllBooks() {
     const res = await this.getResourse('/books/?page=1&pageSize=10');
-    return res.map(this._transformBooks)
+    return res.map(this._transformBook)
   }
   // Получение данных одной книги
   async getBooks(id) {
     const book = await this.getResourse(`/books/${id}`);
-    return this._transformBooks(book);
+    return this._transformBook(book);
   }
-  // Трансформирование данных запроса 
-  _transformBooks(book) {
-    return {
-      name: book.name,
-      numberOfPages: book.numberOfPages,
-      publiser: book.publiser,
-      released: book.released,
-      culture: book.culture
-    }
-  }  
+  
   /* ------------------ ФУНКЦИИ ДОМОВ --------------------- */
   // Получение данных всех домов
   async getAllHouses() {
@@ -66,15 +48,55 @@ export default class GotServise {
     const house = await this.getResourse(`/houses/${id}`);
     return this._transformHouse(house);
   }
+
+  // Функции обработки данных
+  isSet(data) {
+    if (data) {
+        return data
+    } else {
+        return 'no Data'
+    }
+  }    
+
+  _extractId = (item) => {
+    const idRegExp = /\/([0-9]*)$/;
+    return item.url.match(idRegExp)[1];
+  }
+
+
   // Трансформирование данных запроса 
-  _transformHouse(house) {
+  _transformCharacter = (char) => {
     return {
-      name: house.name,
-      region: house.region,
-      words: house.words,
-      titles: house.titles,
-      overlord: house.overlord,
-      ancestralWeapons: house.ancestralWeapons
+      id: this._extractId(char),
+      name: this.isSet(char.name),
+      gender: this.isSet(char.gender),
+      born: this.isSet(char.born),
+      died: this.isSet(char.died),
+      culture: this.isSet(char.culture)
+    }
+  }
+
+  _transformHouse = (house) => {
+    return {
+      id: this._extractId(house),
+      name: this.isSet(house.name),
+      region: this.isSet(house.region),
+      words: this.isSet(house.words),
+      titles: this.isSet(house.titles),
+      overlord: this.isSet(house.overlord),
+      ancestralWeapons: this.isSet(house.ancestralWeapons)
+    }
+  }
+
+  _transformBook = (book) => {
+    return {
+      id: this._extractId(book),
+      name: this.isSet(book.name),
+      numberOfPages: this.isSet(book.numberOfPages),
+      publiser: this.isSet(book.publiser),
+      released: this.isSet(book.released),
+      culture: this.isSet(book.culture)
     }
   }  
+  
 }

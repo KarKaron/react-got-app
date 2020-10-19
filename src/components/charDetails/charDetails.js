@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import gotService from '../../services/gotServise';
+import EmptyChar from '../errorMessage/emptyChar';
+import Spinner from '../spinner/spinner';
+import ErrorMessage from '../errorMessage/errorMessage';
+
 import styled from 'styled-components';
 
 const CharDetail = styled.div`
@@ -13,35 +18,111 @@ const CharDetailTitle = styled.h4`
   text-align: center;
 `;
 
-// const selectEror = styled.span`
-//   color: #fff;
-//   text-align: center;
-//   font-size: 26px;
-// `;
+const Term = styled.span`
+  font-weight: bold;
+`;
+
+const Data = styled.span`
+  color: grey;
+  margin-left: 10px;
+`;
 
 export default class CharDetails extends Component {
+
+  gotService = new gotService();  
+  state = {
+    char: null,
+    loading: true,
+    error: false
+  }
+
+  componentDidCatch() {
+    this.setState({
+      error: true
+    })
+  }
+
+  componentDidMount() {
+    this.updateChar();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.charId !== prevProps.charId) {
+      this.updateChar();
+    }
+  }
+
+  onCharDetailsLoaded = (char) => {
+    this.setState({
+        char,
+        loading: false
+    })
+  }
+
+  updateChar() {
+    const {charId} = this.props;
+
+    if (!charId) {
+      return;
+    }
+
+    this.setState({
+      loading: true
+    })
+
+    this.gotService.getCharacter(charId)
+        .then( this.onCharDetailsLoaded )
+        .catch( () => this.onError())
+  }
+
+  onError(){
+    this.setState({
+        char: null,
+        error: true
+    })
+  }
+
   render() {
+
+    const {char, loading, error} = this.state;
+
+    if (!char && error) {
+      return <ErrorMessage/>
+    } else if (!char) {
+      return <EmptyChar/>
+    }
+    
+    if (loading) {
+      return (
+        <CharDetail>
+          <Spinner/>
+        </CharDetail>
+      )
+    }
+
+    const {name, gender, born, died, culture} = char;
+
     return (
       <CharDetail>
-        <CharDetailTitle>John Snow</CharDetailTitle>
+        <CharDetailTitle>{name}</CharDetailTitle>
         <ul className="list-group list-group-flush">
           <li className="list-group-item d-flex justify-content-between">
-            <span className="term">Gender</span>
-            <span>male</span>
+            <Term>Gender</Term>
+            <Data>{gender}</Data>
           </li>
           <li className="list-group-item d-flex justify-content-between">
-            <span className="term">Born</span>
-            <span>1783</span>
+            <Term>Born</Term>
+            <Data>{born}</Data>
           </li>
           <li className="list-group-item d-flex justify-content-between">
-            <span className="term">Died</span>
-            <span>1820</span>
+            <Term>Died</Term>
+            <Data>{died}</Data>
           </li>
           <li className="list-group-item d-flex justify-content-between">
-            <span className="term">Culture</span>
-            <span>First</span>
+            <Term>Culture</Term>
+            <Data>{culture}</Data>
           </li>
-        </ul>
+        </ul>      
       </CharDetail>
     );
   }

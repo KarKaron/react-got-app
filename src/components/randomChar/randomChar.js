@@ -2,37 +2,46 @@ import React, {Component} from 'react';
 import gotService from '../../services/gotServise'
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
+
 import styled from 'styled-components';
 
 const RandomBlock = styled.div`
   background-color: #fff;
   padding: 25px 25px 15px 25px;
   margin-bottom: 40px;
-`
+`;
+
 const RandomBlockTitle = styled.h4`
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   text-align: center;
-`
+  min-height: 66px;
+`;
+
 const Term = styled.span`
   font-weight: bold;
-`
+`;
+
 const Data = styled.span`
   color: grey;
   margin-left: 10px;
-`
+`;
 
 export default class RandomChar extends Component {
-
-  constructor() {
-    super();
-    this.updateCharacter();
-  }
   
   gotService = new gotService();  
   state = {
     char: {},
     loading: true,
     error: false
+  }
+
+  componentDidMount() {
+    this.updateCharacter();
+    this.timeId = setInterval(this.updateCharacter, 8000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timeId);
   }
 
   onCharLoaded = (char) => {
@@ -42,16 +51,16 @@ export default class RandomChar extends Component {
     })
   }
 
-  onError = (err) => {
+  onError = () => {
     this.setState({
       error: true,
       loading: false
     })
   }
 
-  updateCharacter() {
-    //const id = Math.floor(Math.random()*140 + 25); // Случайное число от 25 до 140
-    const id = 13000000;
+  updateCharacter = () => {
+    const id = Math.floor(Math.random()*140 + 25); // Случайное число от 25 до 140
+    //const id = 13000000;
     this.gotService.getCharacter(id)
         .then(this.onCharLoaded)
         .catch(this.onError);
