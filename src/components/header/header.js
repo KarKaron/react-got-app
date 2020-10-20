@@ -7,13 +7,11 @@ const HeaderBlock = styled.div`
   align-items: center;
   height: 80px;
 `;
-
 const HeaderTitle = styled.h3`
   font-size: 24px;
   color: #fff;
   margin: 0;
 `;
-
 const HeaderLinks = styled.ul`
   display: flex;
   margin: 0;

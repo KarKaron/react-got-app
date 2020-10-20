@@ -13,8 +13,7 @@ const emptyChar = () => {
             <WarningRoundedIcon /> Choose a character!
           </Alert>
         </CardImgOverlay>
-      </Card>
-      
+      </Card>      
     </>
   );
 }

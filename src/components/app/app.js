@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import gotService from '../../services/gotServise';
 import Header from '../header/header';
 import RandomChar from '../randomChar/randomChar';
-import CharacterPage from '../characterPage/characterPage'
+import { CharactersPage, BooksPage, HousesPage } from '../pages/';
 import ErrorMessage from '../errorMessage/errorMessage';
 
 import { Col, Row, Container, Button } from 'reactstrap';
 
 export default class App extends Component {
+  gotService = new gotService();
 
   state = {
     showRandomChar: true,
@@ -14,38 +16,26 @@ export default class App extends Component {
     error: false
   }
 
-  componentDidCatch() {
-    this.setState({
-      error: true
-    })
+  componentDidCatch() { 
+    this.setState({ error: true }) 
   }
 
   onToogle = () => {
     const showRandomChar = !this.state.showRandomChar
     let text = 'Hide Element'
-    if (!showRandomChar) {
-      text = 'Show Element'
-    } 
+
+    if (!showRandomChar) { text = 'Show Element' }
+
     this.setState({
       showRandomChar: showRandomChar,
       buttonText: text
     })
   }
 
-  // onToggle = () => {
-  //   this.setState((state) => {
-  //     return {
-  //       visible: !state.visible
-  //     }
-  //   })
-  // }
-
-  render() {
+  render() {    
     const {showRandomChar, buttonText, error} = this.state;
     
-    if (error) {
-      return <ErrorMessage/>
-    }
+    if (error) { return <ErrorMessage/> }
 
     const content = showRandomChar ? <RandomChar/> : null
 
@@ -67,7 +57,9 @@ export default class App extends Component {
               </Button>  
             </Col>
           </Row>
-          <CharacterPage/>
+          <CharactersPage/>
+          <BooksPage/>
+          <HousesPage/>
         </Container>
       </>
     );

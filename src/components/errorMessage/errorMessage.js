@@ -13,8 +13,7 @@ const ErrorMessage = () => {
             <WarningRoundedIcon /> Ups... Something is wrong!
           </Alert>
         </CardImgOverlay>
-      </Card>
-      
+      </Card>      
     </>
   );
 }

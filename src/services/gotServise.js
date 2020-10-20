@@ -3,7 +3,7 @@ export default class GotServise {
     this._apiBase = "https://www.anapioficeandfire.com/api";
   }
 
-  async getResourse(url) {
+  getResourse = async (url) => {
     const res = await fetch(`${this._apiBase}${url}`);
 
     if (!res.ok) {
@@ -15,36 +15,36 @@ export default class GotServise {
 
   /* ------------------ ФУНКЦИИ ПЕРСОНАЖЕЙ --------------------- */
   // Получение данных всех персонажей
-  async getAllCharacters() {
+  getAllCharacters = async () => {
     const res = await this.getResourse('/characters/?page=20&pageSize=10');
     return res.map(this._transformCharacter)
   }
   // Получение данных одного персонажа
-  async getCharacter(id) {
+  getCharacter = async (id) => {
     const char = await this.getResourse(`/characters/${id}`);
     return this._transformCharacter(char);
   }
 
   /* ------------------ ФУНКЦИИ КНИГ --------------------- */
   // Получение данных всех книг
-  async getAllBooks() {
+  getAllBooks= async () => {
     const res = await this.getResourse('/books/?page=1&pageSize=10');
     return res.map(this._transformBook)
   }
   // Получение данных одной книги
-  async getBooks(id) {
+  getBooks = async (id) => {
     const book = await this.getResourse(`/books/${id}`);
     return this._transformBook(book);
   }
   
   /* ------------------ ФУНКЦИИ ДОМОВ --------------------- */
   // Получение данных всех домов
-  async getAllHouses() {
+  getAllHouses = async () => {
     const res = await this.getResourse('/houses/?page=1&pageSize=10');
     return res.map(this._transformHouse)
   }
   // Получение данных одного дома
-  async getHouses(id) {
+  getHouses = async (id) => {
     const house = await this.getResourse(`/houses/${id}`);
     return this._transformHouse(house);
   }
