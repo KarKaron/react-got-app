@@ -15,6 +15,7 @@ const AppBlock = styled.div`
   background-size: cover;
   font-size: 16px;
   height: 100%;
+  min-height: 100vh;
 `;
 
 export default class App extends Component {
@@ -47,7 +48,7 @@ export default class App extends Component {
     
     if (error) { return <ErrorMessage/> }
 
-    const content = showRandomChar ? <RandomChar/> : null
+    const content = showRandomChar ? <RandomChar interval={15000} /> : null
 
     return (
       <Router>

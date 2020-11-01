@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
+import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
@@ -15,6 +16,15 @@ export default class ItemList extends Component {
   state = {
     itemList: null,
     error: false
+  }
+
+  static defaultProps = {
+    onItemSelected: () => {}
+  }
+  
+  static propTypes = {
+    onItemSelected: PropTypes.func,
+    //getData: PropTypes.arrayOf(PropTypes.object)
   }
 
   componentDidCatch() { 
@@ -64,3 +74,12 @@ export default class ItemList extends Component {
     );
   }
 }
+
+// ItemList.defaultProps = {
+//   onItemSelected: () => {}
+// }
+
+// ItemList.propTypes = {
+//   onItemSelected: PropTypes.func,
+//   getData: PropTypes.arrayOf(PropTypes.object)
+// }
