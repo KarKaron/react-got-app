@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
@@ -11,46 +11,57 @@ const ListGroup = styled.ul`
 const ListGroupItem = styled.li`
   cursor: pointer;
 `;
+function ItemList({getData, renderItem, onItemSelected}) {
 
-export default class ItemList extends Component {
-  state = {
-    itemList: null,
-    error: false
-  }
+  const [itemList, updateList] = useState(null);
+  const [error, updateError] = useState(false);
+  // state = {
+  //   itemList: null,
+  //   error: false
+  // }
 
-  static defaultProps = {
-    onItemSelected: () => {}
-  }
+  // static defaultProps = {
+  //   onItemSelected: () => {}
+  // }
   
-  static propTypes = {
-    onItemSelected: PropTypes.func,
-    //getData: PropTypes.arrayOf(PropTypes.object)
-  }
+  // static propTypes = {
+  //   onItemSelected: PropTypes.func,
+  //   //getData: PropTypes.arrayOf(PropTypes.object)
+  // }
 
-  componentDidCatch() { 
-    this.setState({ error: true }) 
-  }
-  
-  componentDidMount() {
-    const {getData} = this.props;
-
+  useEffect(() => {
     getData()
-        .then((itemList) => {
-          this.setState({ itemList })
-        })
-  }
+      .then((data) => {
+        updateList(data)
+      })
+    return () => {
+      updateError(true)
+    }  
+  }, []);
 
-  renderItems(arr) {
+  // componentDidCatch() { 
+  //   this.setState({ error: true }) 
+  // }
+  
+  // componentDidMount() {
+
+  //   getData()
+  //     .then((itemList) => {
+  //       this.setState({ itemList })
+  //     })
+  // }
+
+  function renderItems(arr) {
     return arr.map((item) => {
 
       const {id} = item;
-      const label = this.props.renderItem(item);
+      const label = renderItem(item);
       
       return (
         <ListGroupItem 
           key={id} 
           className="list-group-item"
-          onClick={ () => this.props.onItemSelected(id) }
+          onClick={ () => onItemSelected(id) }
         >
           {label}
         </ListGroupItem>
@@ -58,21 +69,33 @@ export default class ItemList extends Component {
     })
   } 
 
-  render() {
-    const {itemList, error} = this.state;
+  // render() {
+  //   const {itemList, error} = this.state;
 
-    if (error) { return <ErrorMessage/> }
+  //   if (error) { return <ErrorMessage/> }
 
-    if (!itemList) { return <Spinner/> }
+  //   if (!itemList) { return <Spinner/> }
 
-    const items = this.renderItems(itemList);
+  //   const items = this.renderItems(itemList);
 
-    return (
-      <ListGroup className="item-list list-group">
-        {items}
-      </ListGroup>
-    );
-  }
+  //   return (
+  //     <ListGroup className="item-list list-group">
+  //       {items}
+  //     </ListGroup>
+  //   );
+  // }
+
+  if (error) { return <ErrorMessage/> }
+
+  if (!itemList) { return <Spinner/> }
+
+  const items = renderItems(itemList);
+
+  return (
+    <ListGroup className="item-list list-group">
+      {items}
+    </ListGroup>
+  );
 }
 
 // ItemList.defaultProps = {
@@ -83,3 +106,5 @@ export default class ItemList extends Component {
 //   onItemSelected: PropTypes.func,
 //   getData: PropTypes.arrayOf(PropTypes.object)
 // }
+
+export default ItemList;
